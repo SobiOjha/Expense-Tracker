@@ -3,9 +3,10 @@ package com.learning.expensetracker.controller;
 import com.learning.expensetracker.dto.ExpenseRequestDTO;
 import com.learning.expensetracker.model.Expense;
 import com.learning.expensetracker.service.ExpenseService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @RestController
 public class ExpenseController {
@@ -19,5 +20,15 @@ public class ExpenseController {
     @PostMapping("/expenses")
     public Expense addExpense(@RequestBody ExpenseRequestDTO expense){
         return service.addExpense(expense);
+    }
+
+    @GetMapping("/expenses")
+    public List<Expense> getAllExpenses(){
+        return service.getAllExpenses();
+    }
+
+    @GetMapping("/expenses/{id}")
+    public Expense getExpenseById(@PathVariable Integer id){
+        return service.getExpenseById(id);
     }
 }
