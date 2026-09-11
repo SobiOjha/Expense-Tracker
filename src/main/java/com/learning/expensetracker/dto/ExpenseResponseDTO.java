@@ -2,23 +2,25 @@ package com.learning.expensetracker.dto;
 
 import com.learning.expensetracker.model.enums.ExpenseCategory;
 import com.learning.expensetracker.model.enums.PaymentMethod;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class ExpenseRequestDTO {
-    @NotNull
-    @Positive
+public class ExpenseResponseDTO {
     private BigDecimal amount;
-    @NotNull
+    private Integer id;
     private ExpenseCategory category;
     private String description;
-    @NotNull
     private LocalDate date;
-    @NotNull
     private PaymentMethod paymentMethod;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public BigDecimal getAmount() {
         return amount;
@@ -28,20 +30,20 @@ public class ExpenseRequestDTO {
         this.amount = amount;
     }
 
-    public ExpenseCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(ExpenseCategory category) {
-        this.category = category;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ExpenseCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ExpenseCategory category) {
+        this.category = category;
     }
 
     public LocalDate getDate() {
