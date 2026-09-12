@@ -1,5 +1,4 @@
 package com.learning.expensetracker.model;
-import com.learning.expensetracker.dto.ExpenseResponseDTO;
 import com.learning.expensetracker.model.enums.ExpenseCategory;
 import com.learning.expensetracker.model.enums.PaymentMethod;
 import jakarta.persistence.*;
@@ -19,18 +18,7 @@ public class Expense {
     private PaymentMethod paymentMethod;
     @Enumerated(EnumType.STRING)
     private ExpenseCategory category;
-    private ExpenseResponseDTO mapToResponseDTO(Expense expense) {
-        ExpenseResponseDTO responseDTO = new ExpenseResponseDTO();
 
-        responseDTO.setId(expense.getId());
-        responseDTO.setAmount(expense.getAmount());
-        responseDTO.setDescription(expense.getDescription());
-        responseDTO.setDate(expense.getDate());
-        responseDTO.setCategory(expense.getCategory());
-        responseDTO.setPaymentMethod(expense.getPaymentMethod());
-
-        return responseDTO;
-    }
 
     public Integer getId() {
         return id;
