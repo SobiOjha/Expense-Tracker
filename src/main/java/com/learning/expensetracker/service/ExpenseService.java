@@ -16,78 +16,80 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ExpenseService {
 
     private final ExpenseRepository repo;
+    private ExpenseResponseDTO mapToResponseDTO(Expense expense) {
+        ExpenseResponseDTO responseDTO = new ExpenseResponseDTO();
 
-    public ExpenseService(ExpenseRepository repo) {
-        this.repo = repo;
-    }
-
-    public ExpenseResponseDTO addExpense(ExpenseRequestDTO expense){
-        Expense expenseEntity = new Expense();
-        expenseEntity.setAmount(expense.getAmount());
-        expenseEntity.setDescription(expense.getDescription());
-        expenseEntity.setDate(expense.getDate());
-        expenseEntity.setCategory(expense.getCategory());
-        expenseEntity.setPaymentMethod(expense.getPaymentMethod());
-        Expense savedExpense =repo.save(expenseEntity);
-        ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
-        responseDTO.setId(savedExpense.getId());
-        responseDTO.setAmount(savedExpense.getAmount());
-        responseDTO.setDescription(savedExpense.getDescription());
-        responseDTO.setDate(savedExpense.getDate());
-        responseDTO.setCategory(savedExpense.getCategory());
-        responseDTO.setPaymentMethod(savedExpense.getPaymentMethod());
-        return responseDTO;
-    }
-
-    public List<ExpenseResponseDTO> getAllExpenses(){
-        List<Expense> expenses=repo.findAll();
-        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
-        for (Expense expense:expenses){
-            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
-            responseDTO.setId(expense.getId());
-            responseDTO.setAmount(expense.getAmount());
-            responseDTO.setDescription(expense.getDescription());
-            responseDTO.setDate(expense.getDate());
-            responseDTO.setCategory(expense.getCategory());
-            responseDTO.setPaymentMethod(expense.getPaymentMethod());
-            responseDTOs.add(responseDTO);
-        }
-        return responseDTOs;
-    }
-
-    public ExpenseResponseDTO getExpenseById(Integer id)  {
-        Expense expense= repo.findById(id).orElseThrow(()->new ExpenseNotFoundException("Expense not found of ID:"+ id));
-        ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
         responseDTO.setId(expense.getId());
         responseDTO.setAmount(expense.getAmount());
         responseDTO.setDescription(expense.getDescription());
         responseDTO.setDate(expense.getDate());
         responseDTO.setCategory(expense.getCategory());
         responseDTO.setPaymentMethod(expense.getPaymentMethod());
+
         return responseDTO;
     }
 
-    public ExpenseResponseDTO updateExpenseById(Integer id, ExpenseRequestDTO expense) {
-        Expense expense1= repo.findById(id).orElseThrow(()->new ExpenseNotFoundException("Expense not found of ID:"+ id));
+    public ExpenseService(ExpenseRepository repo) {
+        this.repo = repo;
+    }
+
+    public ExpenseResponseDTO addExpense(ExpenseRequestDTO expense) {
+        Expense expenseEntity = new Expense();
+
+        expenseEntity.setAmount(expense.getAmount());
+        expenseEntity.setDescription(expense.getDescription());
+        expenseEntity.setDate(expense.getDate());
+        expenseEntity.setCategory(expense.getCategory());
+        expenseEntity.setPaymentMethod(expense.getPaymentMethod());
+
+        Expense savedExpense = repo.save(expenseEntity);
+
+        return mapToResponseDTO(savedExpense);
+    }
+
+    public List<ExpenseResponseDTO> getAllExpenses() {
+        List<Expense> expenses = repo.findAll();
+        List<ExpenseResponseDTO> responseDTOs = new ArrayList<>();
+
+        for (Expense expense : expenses) {
+            responseDTOs.add(mapToResponseDTO(expense));
+        }
+
+        return responseDTOs;
+    }
+
+    public ExpenseResponseDTO getExpenseById(Integer id) {
+        Expense expense = repo.findById(id)
+                .orElseThrow(() ->
+                        new ExpenseNotFoundException("Expense not found of ID:" + id));
+
+        return mapToResponseDTO(expense);
+    }
+
+    public ExpenseResponseDTO updateExpenseById(
+            Integer id,
+            ExpenseRequestDTO expense) {
+
+        Expense expense1 = repo.findById(id)
+                .orElseThrow(() ->
+                        new ExpenseNotFoundException(
+                                "Expense not found of ID:" + id));
+
         expense1.setAmount(expense.getAmount());
         expense1.setDescription(expense.getDescription());
         expense1.setDate(expense.getDate());
         expense1.setCategory(expense.getCategory());
         expense1.setPaymentMethod(expense.getPaymentMethod());
-        Expense savedExpense =repo.save(expense1);
-        ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
-        responseDTO.setId(savedExpense.getId());
-        responseDTO.setAmount(savedExpense.getAmount());
-        responseDTO.setDescription(savedExpense.getDescription());
-        responseDTO.setDate(savedExpense.getDate());
-        responseDTO.setCategory(savedExpense.getCategory());
-        responseDTO.setPaymentMethod(savedExpense.getPaymentMethod());
-        return responseDTO;
+
+        Expense savedExpense = repo.save(expense1);
+
+        return mapToResponseDTO(savedExpense);
     }
 
     public void deleteExpenseById(Integer id) {
@@ -95,69 +97,69 @@ public class ExpenseService {
         repo.delete(expense1);
     }
 
-    public List<ExpenseResponseDTO> findByCategory(ExpenseCategory category) {
-        List<Expense> expenses = repo.findByCategory(category);
-        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
-        for (Expense expense: expenses){
-            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
-            responseDTO.setId(expense.getId());
-            responseDTO.setAmount(expense.getAmount());
-            responseDTO.setDescription(expense.getDescription());
-            responseDTO.setDate(expense.getDate());
-            responseDTO.setCategory(expense.getCategory());
-            responseDTO.setPaymentMethod(expense.getPaymentMethod());
-            responseDTOs.add(responseDTO);
-        }
-        return responseDTOs;
-    }
-
-    public List<ExpenseResponseDTO> findByPaymentMethod(PaymentMethod paymentMethod) {
-        List<Expense> expenses = repo.findByPaymentMethod(paymentMethod);
-        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
-        for (Expense expense: expenses){
-            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
-            responseDTO.setId(expense.getId());
-            responseDTO.setAmount(expense.getAmount());
-            responseDTO.setDescription(expense.getDescription());
-            responseDTO.setDate(expense.getDate());
-            responseDTO.setCategory(expense.getCategory());
-            responseDTO.setPaymentMethod(expense.getPaymentMethod());
-            responseDTOs.add(responseDTO);
-        }
-        return responseDTOs;
-    }
-
-    public List<ExpenseResponseDTO> findByAmountLessThanEqual(BigDecimal maxAmount) {
-        List<Expense> expenses = repo.findByAmountLessThanEqual(maxAmount);
-        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
-        for (Expense expense: expenses){
-            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
-            responseDTO.setId(expense.getId());
-            responseDTO.setAmount(expense.getAmount());
-            responseDTO.setDescription(expense.getDescription());
-            responseDTO.setDate(expense.getDate());
-            responseDTO.setCategory(expense.getCategory());
-            responseDTO.setPaymentMethod(expense.getPaymentMethod());
-            responseDTOs.add(responseDTO);
-        }
-        return responseDTOs;
-    }
-
-    public List<ExpenseResponseDTO> findByDate(LocalDate date) {
-        List<Expense> expenses = repo.findByDate(date);
-        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
-        for (Expense expense: expenses){
-            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
-            responseDTO.setId(expense.getId());
-            responseDTO.setAmount(expense.getAmount());
-            responseDTO.setDescription(expense.getDescription());
-            responseDTO.setDate(expense.getDate());
-            responseDTO.setCategory(expense.getCategory());
-            responseDTO.setPaymentMethod(expense.getPaymentMethod());
-            responseDTOs.add(responseDTO);
-        }
-        return responseDTOs;
-    }
+//    public List<ExpenseResponseDTO> findByCategory(ExpenseCategory category) {
+//        List<Expense> expenses = repo.findByCategory(category);
+//        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
+//        for (Expense expense: expenses){
+//            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
+//            responseDTO.setId(expense.getId());
+//            responseDTO.setAmount(expense.getAmount());
+//            responseDTO.setDescription(expense.getDescription());
+//            responseDTO.setDate(expense.getDate());
+//            responseDTO.setCategory(expense.getCategory());
+//            responseDTO.setPaymentMethod(expense.getPaymentMethod());
+//            responseDTOs.add(responseDTO);
+//        }
+//        return responseDTOs;
+//    }
+//
+//    public List<ExpenseResponseDTO> findByPaymentMethod(PaymentMethod paymentMethod) {
+//        List<Expense> expenses = repo.findByPaymentMethod(paymentMethod);
+//        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
+//        for (Expense expense: expenses){
+//            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
+//            responseDTO.setId(expense.getId());
+//            responseDTO.setAmount(expense.getAmount());
+//            responseDTO.setDescription(expense.getDescription());
+//            responseDTO.setDate(expense.getDate());
+//            responseDTO.setCategory(expense.getCategory());
+//            responseDTO.setPaymentMethod(expense.getPaymentMethod());
+//            responseDTOs.add(responseDTO);
+//        }
+//        return responseDTOs;
+//    }
+//
+//    public List<ExpenseResponseDTO> findByAmountLessThanEqual(BigDecimal maxAmount) {
+//        List<Expense> expenses = repo.findByAmountLessThanEqual(maxAmount);
+//        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
+//        for (Expense expense: expenses){
+//            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
+//            responseDTO.setId(expense.getId());
+//            responseDTO.setAmount(expense.getAmount());
+//            responseDTO.setDescription(expense.getDescription());
+//            responseDTO.setDate(expense.getDate());
+//            responseDTO.setCategory(expense.getCategory());
+//            responseDTO.setPaymentMethod(expense.getPaymentMethod());
+//            responseDTOs.add(responseDTO);
+//        }
+//        return responseDTOs;
+//    }
+//
+//    public List<ExpenseResponseDTO> findByDate(LocalDate date) {
+//        List<Expense> expenses = repo.findByDate(date);
+//        List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
+//        for (Expense expense: expenses){
+//            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
+//            responseDTO.setId(expense.getId());
+//            responseDTO.setAmount(expense.getAmount());
+//            responseDTO.setDescription(expense.getDescription());
+//            responseDTO.setDate(expense.getDate());
+//            responseDTO.setCategory(expense.getCategory());
+//            responseDTO.setPaymentMethod(expense.getPaymentMethod());
+//            responseDTOs.add(responseDTO);
+//        }
+//        return responseDTOs;
+//    }
 
     public List<ExpenseResponseDTO> filterExpenses(
             ExpenseCategory category,
@@ -166,7 +168,7 @@ public class ExpenseService {
             LocalDate date
     ){
         Specification<Expense> specification =
-                Specification.unrestricted();;
+                Specification.unrestricted();
         if (category != null) {
             specification = specification.and(
                     ExpenseSpecification.byCategory(category)
@@ -190,14 +192,7 @@ public class ExpenseService {
         List<Expense> expenses = repo.findAll(specification);
         List<ExpenseResponseDTO> responseDTOs=new ArrayList<>();
         for (Expense expense: expenses){
-            ExpenseResponseDTO responseDTO=new ExpenseResponseDTO();
-            responseDTO.setId(expense.getId());
-            responseDTO.setAmount(expense.getAmount());
-            responseDTO.setDescription(expense.getDescription());
-            responseDTO.setDate(expense.getDate());
-            responseDTO.setCategory(expense.getCategory());
-            responseDTO.setPaymentMethod(expense.getPaymentMethod());
-            responseDTOs.add(responseDTO);
+            responseDTOs.add(mapToResponseDTO(expense));
         }
         return responseDTOs;
     }
@@ -207,10 +202,10 @@ public class ExpenseService {
         return repo.getTotalAmount();
     }
 
-    public HashMap<ExpenseCategory, BigDecimal> getTotalAmountByCategory()
+    public Map<ExpenseCategory, BigDecimal> getTotalAmountByCategory()
     {
         List<Object[]> results = repo.getTotalAmountByCategory();
-        HashMap<ExpenseCategory, BigDecimal> response=new HashMap<>();
+        Map<ExpenseCategory, BigDecimal> response=new HashMap<>();
         for (Object[] row : results) {
             ExpenseCategory category = (ExpenseCategory) row[0];
             BigDecimal total = (BigDecimal) row[1];
@@ -225,9 +220,9 @@ public class ExpenseService {
         return repo.getTotalAmountByDate(startDate, endDate);
     }
 
-    public HashMap<PaymentMethod, BigDecimal> getTotalAmountByPaymentMethod() {
+    public Map<PaymentMethod, BigDecimal> getTotalAmountByPaymentMethod() {
         List<Object[]> results = repo.getTotalAmountByPaymentMethod();
-        HashMap<PaymentMethod, BigDecimal> response=new HashMap<>();
+        Map<PaymentMethod, BigDecimal> response=new HashMap<>();
         for (Object[] row : results) {
             PaymentMethod paymentMethod = (PaymentMethod) row[0];
             BigDecimal total = (BigDecimal) row[1];

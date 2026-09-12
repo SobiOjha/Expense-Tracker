@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -58,25 +58,25 @@ public class ExpenseController {
         );
     }
 
-    @GetMapping("/expenses/filter/category")
-    public List<ExpenseResponseDTO> findByCategory(@RequestParam ExpenseCategory category){
-        return service.findByCategory(category);
-    }
-
-    @GetMapping("/expenses/filter/payment-method")
-    public List<ExpenseResponseDTO> findByPaymentMethod(@RequestParam PaymentMethod paymentMethod){
-        return service.findByPaymentMethod(paymentMethod);
-    }
-
-    @GetMapping("expenses/filter/max-amount")
-    public List<ExpenseResponseDTO> findByAmountLessThanEqual(@RequestParam BigDecimal maxAmount){
-        return service.findByAmountLessThanEqual(maxAmount);
-    }
-
-    @GetMapping("expenses/filter/date")
-    public List<ExpenseResponseDTO> findByDate(@RequestParam LocalDate date){
-        return service.findByDate(date);
-    }
+//    @GetMapping("/expenses/filter/category")
+//    public List<ExpenseResponseDTO> findByCategory(@RequestParam ExpenseCategory category){
+//        return service.findByCategory(category);
+//    }
+//
+//    @GetMapping("/expenses/filter/payment-method")
+//    public List<ExpenseResponseDTO> findByPaymentMethod(@RequestParam PaymentMethod paymentMethod){
+//        return service.findByPaymentMethod(paymentMethod);
+//    }
+//
+//    @GetMapping("/expenses/filter/max-amount")
+//    public List<ExpenseResponseDTO> findByAmountLessThanEqual(@RequestParam BigDecimal maxAmount){
+//        return service.findByAmountLessThanEqual(maxAmount);
+//    }
+//
+//    @GetMapping("/expenses/filter/date")
+//    public List<ExpenseResponseDTO> findByDate(@RequestParam LocalDate date){
+//        return service.findByDate(date);
+//    }
 
     @GetMapping("/expenses/filter")
     public List<ExpenseResponseDTO> filterExpenses(
@@ -93,24 +93,24 @@ public class ExpenseController {
         );
     }
 
-    @GetMapping("expenses/stats/total")
+    @GetMapping("/expenses/stats/total")
     public BigDecimal getTotalExpenses(){
         return service.getTotalAmount();
     }
 
-    @GetMapping("expenses/stats/category")
-    public HashMap<ExpenseCategory, BigDecimal> getTotalExpensesByCategory(){
+    @GetMapping("/expenses/stats/category")
+    public Map<ExpenseCategory, BigDecimal> getTotalExpensesByCategory(){
         return service.getTotalAmountByCategory();
     }
 
-    @GetMapping("expenses/stats/date")
+    @GetMapping("/expenses/stats/date")
     public BigDecimal getTotalExpensesByDate(@RequestParam LocalDate startDate,
                                              @RequestParam LocalDate endDate){
         return service.getTotalAmountByDate(startDate, endDate);
     }
 
-    @GetMapping("expenses/stats/payment-method")
-    public HashMap<PaymentMethod, BigDecimal> getTotalExpensesByPaymentMethod(){
+    @GetMapping("/expenses/stats/payment-method")
+    public Map<PaymentMethod, BigDecimal> getTotalExpensesByPaymentMethod(){
         return service.getTotalAmountByPaymentMethod();
     }
 }
