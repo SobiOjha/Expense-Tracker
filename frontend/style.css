@@ -4,9 +4,11 @@
 
 
 :root {
+
     --background: #f4f6f8;
     --surface: #ffffff;
     --border: #e1e5e9;
+
     --text: #1f2937;
     --muted: #6b7280;
 
@@ -24,10 +26,13 @@
 
 
 body {
+
     margin: 0;
+
     padding: 32px;
 
     background: var(--background);
+
     color: var(--text);
 
     font-family: Arial, sans-serif;
@@ -46,43 +51,128 @@ button {
 }
 
 
-
 /* ============================================================
    HEADER
    ============================================================ */
 
 .page-header {
+
     max-width: 1100px;
+
     margin: 0 auto 28px;
 }
 
 
 .page-header h1 {
+
     margin: 0 0 8px;
+
     font-size: 34px;
 }
 
 
 .page-header p {
+
     margin: 0;
+
     color: var(--muted);
 }
 
 
-
 /* ============================================================
-   MODULES
+   NAVIGATION
    ============================================================ */
 
-.module {
+.page-navigation {
+
     max-width: 1100px;
 
     margin: 0 auto 24px;
+
+    display: flex;
+
+    gap: 8px;
+
+    padding: 6px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    box-shadow: var(--shadow);
+}
+
+
+.nav-button {
+
+    flex: 1;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    padding: 12px 18px;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    font-weight: bold;
+
+    transition:
+        background 0.2s,
+        color 0.2s;
+}
+
+
+.nav-button:hover {
+
+    background: #f1f5f9;
+}
+
+
+.nav-button.active {
+
+    background: var(--primary);
+
+    color: white;
+}
+
+
+/* ============================================================
+   PAGE VISIBILITY
+   ============================================================ */
+
+.page {
+
+    display: none;
+}
+
+
+.page.active-page {
+
+    display: block;
+}
+
+
+/* ============================================================
+   MODULE
+   ============================================================ */
+
+.module {
+
+    max-width: 1100px;
+
+    margin: 0 auto 24px;
+
     padding: 26px;
 
     background: var(--surface);
 
     border: 1px solid var(--border);
+
     border-radius: 14px;
 
     box-shadow: var(--shadow);
@@ -90,9 +180,11 @@ button {
 
 
 .module-header {
+
     display: flex;
 
     justify-content: space-between;
+
     align-items: flex-end;
 
     gap: 20px;
@@ -102,7 +194,9 @@ button {
 
 
 .module-header > div {
+
     display: flex;
+
     align-items: center;
 
     gap: 12px;
@@ -110,12 +204,15 @@ button {
 
 
 .module-header h2 {
+
     margin: 0;
+
     font-size: 22px;
 }
 
 
 .module-header p {
+
     margin: 0;
 
     color: var(--muted);
@@ -125,6 +222,7 @@ button {
 
 
 .module-number {
+
     font-size: 12px;
 
     font-weight: bold;
@@ -135,12 +233,12 @@ button {
 }
 
 
-
 /* ============================================================
    FORMS
    ============================================================ */
 
 .expense-form {
+
     display: grid;
 
     grid-template-columns:
@@ -152,6 +250,7 @@ button {
 
 .form-group,
 .filter-group {
+
     display: flex;
 
     flex-direction: column;
@@ -161,11 +260,13 @@ button {
 
 
 .form-group-wide {
+
     grid-column: span 2;
 }
 
 
 label {
+
     font-size: 13px;
 
     font-weight: bold;
@@ -174,6 +275,7 @@ label {
 
 input,
 select {
+
     width: 100%;
 
     padding: 11px 12px;
@@ -192,6 +294,7 @@ select {
 
 input:focus,
 select:focus {
+
     border-color: var(--primary);
 }
 
@@ -199,6 +302,7 @@ select:focus {
 .primary-button,
 .secondary-button,
 .danger-button {
+
     border: 0;
 
     border-radius: 7px;
@@ -210,6 +314,7 @@ select:focus {
 
 
 .primary-button {
+
     background: var(--primary);
 
     color: white;
@@ -217,11 +322,13 @@ select:focus {
 
 
 .primary-button:hover {
+
     background: var(--primary-dark);
 }
 
 
 .secondary-button {
+
     background: #eef1f4;
 
     color: var(--text);
@@ -229,11 +336,13 @@ select:focus {
 
 
 .secondary-button:hover {
+
     background: #e2e6ea;
 }
 
 
 .danger-button {
+
     background: var(--danger);
 
     color: white;
@@ -241,162 +350,25 @@ select:focus {
 
 
 .danger-button:hover {
+
     background: var(--danger-dark);
 }
 
 
 .expense-form > .primary-button {
+
     grid-column: span 2;
 
     justify-self: start;
 }
 
 
-
 /* ============================================================
-   EXPENSE CARDS
-   ============================================================ */
-
-.expense-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 14px;
-}
-
-
-.expense-item {
-    padding: 18px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    background: #fafbfc;
-}
-
-
-.expense-top {
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 12px;
-
-    align-items: flex-start;
-
-    margin-bottom: 14px;
-}
-
-
-.expense-amount {
-    margin: 0;
-
-    font-size: 22px;
-
-    font-weight: bold;
-}
-
-
-.expense-category {
-    display: inline-block;
-
-    padding: 5px 9px;
-
-    border-radius: 20px;
-
-    background: #eaf1ff;
-
-    color: var(--primary-dark);
-
-    font-size: 12px;
-
-    font-weight: bold;
-}
-
-
-.expense-details {
-    display: grid;
-
-    gap: 8px;
-
-    margin-bottom: 16px;
-}
-
-
-.expense-detail {
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    font-size: 14px;
-}
-
-
-.expense-detail span:first-child {
-    color: var(--muted);
-}
-
-
-.expense-actions {
-    display: flex;
-
-    gap: 8px;
-}
-
-
-.expense-actions button {
-    flex: 1;
-
-    border: 0;
-
-    border-radius: 6px;
-
-    padding: 9px;
-
-    font-weight: bold;
-}
-
-
-.update-button {
-    background: #eaf1ff;
-
-    color: var(--primary-dark);
-}
-
-
-.delete-button {
-    background: #feecec;
-
-    color: var(--danger);
-}
-
-
-.empty-state {
-    display: none;
-
-    padding: 30px;
-
-    text-align: center;
-
-    color: var(--muted);
-
-    border: 1px dashed var(--border);
-
-    border-radius: 10px;
-}
-
-
-
-/* ============================================================
-   FILTERS
+   EXPENSE FILTERS
    ============================================================ */
 
 .filters {
+
     display: flex;
 
     align-items: flex-end;
@@ -418,6 +390,7 @@ select:focus {
 
 
 .filter-group {
+
     min-width: 160px;
 
     flex: 1;
@@ -425,11 +398,162 @@ select:focus {
 
 
 .filter-actions {
+
     display: flex;
 
     gap: 8px;
 }
 
+
+/* ============================================================
+   EXPENSE CARDS
+   ============================================================ */
+
+.expense-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+.expense-item {
+
+    padding: 18px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: #fafbfc;
+}
+
+
+.expense-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    align-items: flex-start;
+
+    margin-bottom: 14px;
+}
+
+
+.expense-amount {
+
+    margin: 0;
+
+    font-size: 22px;
+
+    font-weight: bold;
+}
+
+
+.expense-category {
+
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: #eaf1ff;
+
+    color: var(--primary-dark);
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+
+.expense-details {
+
+    display: grid;
+
+    gap: 8px;
+
+    margin-bottom: 16px;
+}
+
+
+.expense-detail {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    font-size: 14px;
+}
+
+
+.expense-detail span:first-child {
+
+    color: var(--muted);
+}
+
+
+.expense-actions {
+
+    display: flex;
+
+    gap: 8px;
+}
+
+
+.expense-actions button {
+
+    flex: 1;
+
+    border: 0;
+
+    border-radius: 6px;
+
+    padding: 9px;
+
+    font-weight: bold;
+}
+
+
+.update-button {
+
+    background: #eaf1ff;
+
+    color: var(--primary-dark);
+}
+
+
+.delete-button {
+
+    background: #feecec;
+
+    color: var(--danger);
+}
+
+
+.empty-state {
+
+    display: none;
+
+    padding: 30px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    border: 1px dashed var(--border);
+
+    border-radius: 10px;
+}
 
 
 /* ============================================================
@@ -437,6 +561,7 @@ select:focus {
    ============================================================ */
 
 .stats-grid {
+
     display: grid;
 
     grid-template-columns: 2fr 1fr;
@@ -450,6 +575,7 @@ select:focus {
 .stat-card,
 .stats-panel,
 .date-stats-panel {
+
     border: 1px solid var(--border);
 
     border-radius: 10px;
@@ -461,6 +587,7 @@ select:focus {
 
 
 .stat-card {
+
     display: flex;
 
     flex-direction: column;
@@ -470,6 +597,7 @@ select:focus {
 
 
 .stat-label {
+
     color: var(--muted);
 
     font-size: 13px;
@@ -479,11 +607,13 @@ select:focus {
 
 
 .stat-card strong {
+
     font-size: 28px;
 }
 
 
 .stats-columns {
+
     display: grid;
 
     grid-template-columns: 1fr 1fr;
@@ -496,11 +626,13 @@ select:focus {
 
 .stats-panel h3,
 .date-stats-panel h3 {
+
     margin: 0 0 14px;
 }
 
 
 .stat-list {
+
     display: grid;
 
     gap: 8px;
@@ -508,6 +640,7 @@ select:focus {
 
 
 .stat-row {
+
     display: flex;
 
     justify-content: space-between;
@@ -523,16 +656,23 @@ select:focus {
 
 
 .stat-row:last-child {
+
     border-bottom: 0;
 }
 
 
 .stat-row span:first-child {
+
     color: var(--muted);
 }
 
 
+/* ============================================================
+   DATE RANGE
+   ============================================================ */
+
 .date-stats-panel {
+
     display: grid;
 
     grid-template-columns: 1fr auto;
@@ -544,11 +684,13 @@ select:focus {
 
 
 .date-stats-panel h3 {
+
     margin-bottom: 5px;
 }
 
 
 .date-stats-panel p {
+
     margin: 0;
 
     color: var(--muted);
@@ -558,6 +700,7 @@ select:focus {
 
 
 .date-range-controls {
+
     display: flex;
 
     align-items: flex-end;
@@ -567,11 +710,11 @@ select:focus {
 
 
 .date-stats-panel > strong {
+
     grid-column: 1 / -1;
 
     font-size: 26px;
 }
-
 
 
 /* ============================================================
@@ -579,6 +722,7 @@ select:focus {
    ============================================================ */
 
 .modal-overlay {
+
     display: none;
 
     position: fixed;
@@ -599,6 +743,7 @@ select:focus {
 
 .modal-card,
 .confirm-card {
+
     width: 100%;
 
     max-width: 560px;
@@ -615,6 +760,7 @@ select:focus {
 
 
 .confirm-card {
+
     max-width: 430px;
 
     text-align: center;
@@ -622,6 +768,7 @@ select:focus {
 
 
 .modal-header {
+
     display: flex;
 
     justify-content: space-between;
@@ -633,11 +780,13 @@ select:focus {
 
 
 .modal-header h2 {
+
     margin: 5px 0 0;
 }
 
 
 .close-button {
+
     border: 0;
 
     background: transparent;
@@ -651,6 +800,7 @@ select:focus {
 
 
 .modal-actions {
+
     display: flex;
 
     gap: 10px;
@@ -660,11 +810,13 @@ select:focus {
 
 
 .modal-actions button {
+
     flex: 1;
 }
 
 
 .confirm-icon {
+
     width: 44px;
 
     height: 44px;
@@ -690,11 +842,13 @@ select:focus {
 
 
 .confirm-card h2 {
+
     margin: 0 0 8px;
 }
 
 
 .confirm-card p {
+
     margin: 0;
 
     color: var(--muted);
@@ -703,12 +857,12 @@ select:focus {
 }
 
 
-
 /* ============================================================
    NOTIFICATIONS
    ============================================================ */
 
 #notificationContainer {
+
     position: fixed;
 
     top: 20px;
@@ -728,6 +882,7 @@ select:focus {
 
 
 .notification {
+
     padding: 14px 16px;
 
     background: white;
@@ -741,21 +896,25 @@ select:focus {
     box-shadow:
         0 8px 25px rgba(15, 23, 42, 0.15);
 
-    animation: notificationIn 0.2s ease-out;
+    animation:
+        notificationIn 0.2s ease-out;
 }
 
 
 .notification.success {
+
     border-left-color: var(--success);
 }
 
 
 .notification.error {
+
     border-left-color: var(--danger);
 }
 
 
 .notification-title {
+
     margin-bottom: 4px;
 
     font-size: 13px;
@@ -765,6 +924,7 @@ select:focus {
 
 
 .notification-message {
+
     font-size: 14px;
 
     line-height: 1.4;
@@ -774,19 +934,20 @@ select:focus {
 @keyframes notificationIn {
 
     from {
+
         opacity: 0;
 
         transform: translateX(20px);
     }
 
     to {
+
         opacity: 1;
 
         transform: translateX(0);
     }
 
 }
-
 
 
 /* ============================================================
@@ -796,16 +957,19 @@ select:focus {
 @media (max-width: 800px) {
 
     body {
+
         padding: 18px;
     }
 
 
     .module {
+
         padding: 20px;
     }
 
 
     .module-header {
+
         align-items: flex-start;
 
         flex-direction: column;
@@ -813,6 +977,7 @@ select:focus {
 
 
     .module-header p {
+
         text-align: left;
     }
 
@@ -820,21 +985,25 @@ select:focus {
     .expense-grid,
     .stats-columns,
     .stats-grid {
+
         grid-template-columns: 1fr;
     }
 
 
     .date-stats-panel {
+
         grid-template-columns: 1fr;
     }
 
 
     .date-range-controls {
+
         flex-wrap: wrap;
     }
 
 
     .date-range-controls .filter-group {
+
         min-width: 140px;
     }
 
@@ -843,38 +1012,51 @@ select:focus {
 
 @media (max-width: 600px) {
 
+    .page-navigation {
+
+        flex-direction: column;
+    }
+
+
     .expense-form {
+
         grid-template-columns: 1fr;
     }
 
 
     .form-group-wide,
     .expense-form > .primary-button {
+
         grid-column: span 1;
     }
 
 
     .filters {
+
         align-items: stretch;
     }
 
 
     .filter-group {
+
         min-width: 100%;
     }
 
 
     .filter-actions {
+
         width: 100%;
     }
 
 
     .filter-actions button {
+
         flex: 1;
     }
 
 
     .date-range-controls {
+
         flex-direction: column;
 
         align-items: stretch;
@@ -882,6 +1064,7 @@ select:focus {
 
 
     .modal-actions {
+
         flex-direction: column;
     }
 

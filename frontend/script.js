@@ -13,6 +13,8 @@ let allExpenses = [];
 
 let filteredExpenses = [];
 
+let statisticsExpenses = [];
+
 let expenseIdToDelete = null;
 
 
@@ -45,19 +47,96 @@ const cancelDeleteButton =
     document.getElementById("cancelDeleteButton");
 
 
+// ============================================================
+// PAGE NAVIGATION
+// ============================================================
+
+const navButtons =
+    document.querySelectorAll(".nav-button");
+
+const pages =
+    document.querySelectorAll(".page");
+
+
+navButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            const targetPage =
+                button.dataset.page;
+
+
+            // Hide all pages
+
+            pages.forEach(page => {
+
+                page.classList.remove(
+                    "active-page"
+                );
+
+            });
+
+
+            // Remove active state
+
+            navButtons.forEach(navButton => {
+
+                navButton.classList.remove(
+                    "active"
+                );
+
+            });
+
+
+            // Show selected page
+
+            document
+                .getElementById(targetPage)
+                .classList.add(
+                    "active-page"
+                );
+
+
+            // Activate selected button
+
+            button.classList.add("active");
+
+
+            // Recalculate statistics
+            // when statistics page is opened
+
+            if (targetPage === "statisticsPage") {
+
+                applyStatisticsFilters();
+
+            }
+
+        }
+    );
+
+});
+
 
 // ============================================================
 // NOTIFICATIONS
 // ============================================================
 
-function showNotification(message, type = "success") {
+function showNotification(
+    message,
+    type = "success"
+) {
 
     const container =
-        document.getElementById("notificationContainer");
+        document.getElementById(
+            "notificationContainer"
+        );
 
 
     const notification =
         document.createElement("div");
+
 
     notification.className =
         `notification ${type}`;
@@ -70,20 +149,27 @@ function showNotification(message, type = "success") {
 
 
     notification.innerHTML = `
+
         <div class="notification-title">
             ${title}
         </div>
 
-        <div class="notification-message"></div>
+        <div class="notification-message">
+        </div>
+
     `;
 
 
     notification
-        .querySelector(".notification-message")
+        .querySelector(
+            ".notification-message"
+        )
         .textContent = message;
 
 
-    container.appendChild(notification);
+    container.appendChild(
+        notification
+    );
 
 
     setTimeout(() => {
@@ -91,8 +177,8 @@ function showNotification(message, type = "success") {
         notification.remove();
 
     }, 3500);
-}
 
+}
 
 
 // ============================================================
@@ -102,10 +188,16 @@ function showNotification(message, type = "success") {
 async function parseResponse(response) {
 
     const contentType =
-        response.headers.get("content-type") || "";
+        response.headers.get(
+            "content-type"
+        ) || "";
 
 
-    if (contentType.includes("application/json")) {
+    if (
+        contentType.includes(
+            "application/json"
+        )
+    ) {
 
         return await response.json();
 
@@ -113,6 +205,7 @@ async function parseResponse(response) {
 
 
     return await response.text();
+
 }
 
 
@@ -160,8 +253,8 @@ async function handleResponse(response) {
 
 
     return data;
-}
 
+}
 
 
 // ============================================================
@@ -178,19 +271,29 @@ expenseForm.addEventListener(
         const data = {
 
             amount:
-                document.getElementById("amount").value,
+                document
+                    .getElementById("amount")
+                    .value,
 
             category:
-                document.getElementById("category").value,
+                document
+                    .getElementById("category")
+                    .value,
 
             description:
-                document.getElementById("description").value,
+                document
+                    .getElementById("description")
+                    .value,
 
             date:
-                document.getElementById("date").value,
+                document
+                    .getElementById("date")
+                    .value,
 
             paymentMethod:
-                document.getElementById("paymentMethod").value
+                document
+                    .getElementById("paymentMethod")
+                    .value
 
         };
 
@@ -201,20 +304,26 @@ expenseForm.addEventListener(
                 await fetch(
                     `${API_BASE_URL}/expenses`,
                     {
+
                         method: "POST",
 
                         headers: {
+
                             "Content-Type":
                                 "application/json"
+
                         },
 
                         body:
                             JSON.stringify(data)
+
                     }
                 );
 
 
-            await handleResponse(response);
+            await handleResponse(
+                response
+            );
 
 
             expenseForm.reset();
@@ -226,6 +335,14 @@ expenseForm.addEventListener(
 
 
             await loadExpenses();
+
+
+            // Automatically move
+            // user to Expenses page
+
+            switchToPage(
+                "expensesPage"
+            );
 
         }
 
@@ -245,7 +362,6 @@ expenseForm.addEventListener(
 );
 
 
-
 // ============================================================
 // GET ALL EXPENSES
 // ============================================================
@@ -261,7 +377,9 @@ async function loadExpenses() {
 
 
         const expenses =
-            await handleResponse(response);
+            await handleResponse(
+                response
+            );
 
 
         allExpenses =
@@ -274,13 +392,17 @@ async function loadExpenses() {
             [...allExpenses];
 
 
+        statisticsExpenses =
+            [...allExpenses];
+
+
         displayExpenses(
             filteredExpenses
         );
 
 
         updateStatistics(
-            filteredExpenses
+            statisticsExpenses
         );
 
     }
@@ -301,12 +423,13 @@ async function loadExpenses() {
 }
 
 
-
 // ============================================================
 // DISPLAY EXPENSES
 // ============================================================
 
-function displayExpenses(expenses) {
+function displayExpenses(
+    expenses
+) {
 
     expenseList.innerHTML = "";
 
@@ -339,9 +462,11 @@ function displayExpenses(expenses) {
 
             <div class="expense-top">
 
-                <p class="expense-amount"></p>
+                <p class="expense-amount">
+                </p>
 
-                <span class="expense-category"></span>
+                <span class="expense-category">
+                </span>
 
             </div>
 
@@ -394,56 +519,77 @@ function displayExpenses(expenses) {
                 <button
                     class="update-button"
                     type="button">
+
                     Update
+
                 </button>
 
 
                 <button
                     class="delete-button"
                     type="button">
+
                     Delete
+
                 </button>
 
             </div>
+
         `;
 
 
         expenseItem
-            .querySelector(".expense-amount")
+            .querySelector(
+                ".expense-amount"
+            )
             .textContent =
-            "₹" +
-            formatAmount(expense.amount);
+                "₹" +
+                formatAmount(
+                    expense.amount
+                );
 
 
         expenseItem
-            .querySelector(".expense-category")
+            .querySelector(
+                ".expense-category"
+            )
             .textContent =
-            formatLabel(expense.category);
+                formatLabel(
+                    expense.category
+                );
 
 
         expenseItem
-            .querySelector(".expense-description")
+            .querySelector(
+                ".expense-description"
+            )
             .textContent =
-            expense.description ||
-            "No description";
+                expense.description ||
+                "No description";
 
 
         expenseItem
-            .querySelector(".expense-date")
+            .querySelector(
+                ".expense-date"
+            )
             .textContent =
-            expense.date;
+                expense.date;
 
 
         expenseItem
-            .querySelector(".expense-payment")
+            .querySelector(
+                ".expense-payment"
+            )
             .textContent =
-            formatLabel(
-                expense.paymentMethod
-            );
+                formatLabel(
+                    expense.paymentMethod
+                );
 
 
         expenseItem
-            .querySelector(".update-button")
+            .querySelector(
+                ".update-button"
+            )
             .addEventListener(
                 "click",
                 () =>
@@ -454,7 +600,9 @@ function displayExpenses(expenses) {
 
 
         expenseItem
-            .querySelector(".delete-button")
+            .querySelector(
+                ".delete-button"
+            )
             .addEventListener(
                 "click",
                 () =>
@@ -473,7 +621,6 @@ function displayExpenses(expenses) {
 }
 
 
-
 // ============================================================
 // UPDATE EXPENSE - OPEN MODAL
 // ============================================================
@@ -489,30 +636,44 @@ async function openEditModal(id) {
 
 
         const expense =
-            await handleResponse(response);
+            await handleResponse(
+                response
+            );
 
 
-        document.getElementById("editId").value =
+        document.getElementById(
+            "editId"
+        ).value =
             expense.id;
 
 
-        document.getElementById("editAmount").value =
+        document.getElementById(
+            "editAmount"
+        ).value =
             expense.amount;
 
 
-        document.getElementById("editCategory").value =
+        document.getElementById(
+            "editCategory"
+        ).value =
             expense.category;
 
 
-        document.getElementById("editDescription").value =
+        document.getElementById(
+            "editDescription"
+        ).value =
             expense.description || "";
 
 
-        document.getElementById("editDate").value =
+        document.getElementById(
+            "editDate"
+        ).value =
             expense.date;
 
 
-        document.getElementById("editPaymentMethod").value =
+        document.getElementById(
+            "editPaymentMethod"
+        ).value =
             expense.paymentMethod;
 
 
@@ -535,7 +696,6 @@ async function openEditModal(id) {
     }
 
 }
-
 
 
 // ============================================================
@@ -591,27 +751,29 @@ editExpenseForm.addEventListener(
                 await fetch(
                     `${API_BASE_URL}/expenses/${id}`,
                     {
+
                         method: "PUT",
 
                         headers: {
+
                             "Content-Type":
                                 "application/json"
+
                         },
 
                         body:
                             JSON.stringify(data)
+
                     }
                 );
 
 
-            await handleResponse(response);
+            await handleResponse(
+                response
+            );
 
 
-            editSection.style.display =
-                "none";
-
-
-            editExpenseForm.reset();
+            closeEditModal();
 
 
             showNotification(
@@ -639,13 +801,14 @@ editExpenseForm.addEventListener(
 );
 
 
-
 // ============================================================
 // CLOSE UPDATE MODAL
 // ============================================================
 
 document
-    .getElementById("cancelEditButton")
+    .getElementById(
+        "cancelEditButton"
+    )
     .addEventListener(
         "click",
         closeEditModal
@@ -653,7 +816,9 @@ document
 
 
 document
-    .getElementById("closeEditButton")
+    .getElementById(
+        "closeEditButton"
+    )
     .addEventListener(
         "click",
         closeEditModal
@@ -671,14 +836,14 @@ function closeEditModal() {
 }
 
 
-
 // ============================================================
-// DELETE EXPENSE - OPEN CONFIRMATION
+// DELETE EXPENSE - OPEN
 // ============================================================
 
 function openDeleteModal(id) {
 
     expenseIdToDelete = id;
+
 
     deleteSection.style.display =
         "flex";
@@ -686,14 +851,14 @@ function openDeleteModal(id) {
 }
 
 
-
 // ============================================================
-// DELETE EXPENSE - CLOSE CONFIRMATION
+// DELETE EXPENSE - CLOSE
 // ============================================================
 
 function closeDeleteModal() {
 
     expenseIdToDelete = null;
+
 
     deleteSection.style.display =
         "none";
@@ -705,7 +870,6 @@ cancelDeleteButton.addEventListener(
     "click",
     closeDeleteModal
 );
-
 
 
 // ============================================================
@@ -735,12 +899,16 @@ confirmDeleteButton.addEventListener(
                 await fetch(
                     `${API_BASE_URL}/expenses/${id}`,
                     {
+
                         method: "DELETE"
+
                     }
                 );
 
 
-            await handleResponse(response);
+            await handleResponse(
+                response
+            );
 
 
             closeDeleteModal();
@@ -774,13 +942,14 @@ confirmDeleteButton.addEventListener(
 );
 
 
-
 // ============================================================
-// FILTER EXPENSES
+// EXPENSE PAGE FILTERS
 // ============================================================
 
 document
-    .getElementById("filterButton")
+    .getElementById(
+        "filterButton"
+    )
     .addEventListener(
         "click",
         applyFilters
@@ -870,11 +1039,6 @@ function applyFilters() {
     );
 
 
-    updateStatistics(
-        filteredExpenses
-    );
-
-
     showNotification(
         filteredExpenses.length +
         " matching expense(s) found."
@@ -883,13 +1047,14 @@ function applyFilters() {
 }
 
 
-
 // ============================================================
-// CLEAR FILTERS
+// CLEAR EXPENSE FILTERS
 // ============================================================
 
 document
-    .getElementById("clearFilterButton")
+    .getElementById(
+        "clearFilterButton"
+    )
     .addEventListener(
         "click",
         function() {
@@ -923,11 +1088,6 @@ document
             );
 
 
-            updateStatistics(
-                filteredExpenses
-            );
-
-
             showNotification(
                 "Filters cleared."
             );
@@ -935,6 +1095,153 @@ document
         }
     );
 
+
+// ============================================================
+// STATISTICS FILTERS
+// ============================================================
+
+document
+    .getElementById(
+        "statisticsFilterButton"
+    )
+    .addEventListener(
+        "click",
+        applyStatisticsFilters
+    );
+
+
+function applyStatisticsFilters() {
+
+    const category =
+        document.getElementById(
+            "statisticsCategory"
+        ).value;
+
+
+    const paymentMethod =
+        document.getElementById(
+            "statisticsPaymentMethod"
+        ).value;
+
+
+    const maxAmount =
+        document.getElementById(
+            "statisticsMaxAmount"
+        ).value;
+
+
+    const date =
+        document.getElementById(
+            "statisticsDate"
+        ).value;
+
+
+    statisticsExpenses =
+        allExpenses.filter(
+            expense => {
+
+                if (
+                    category &&
+                    expense.category !== category
+                ) {
+
+                    return false;
+
+                }
+
+
+                if (
+                    paymentMethod &&
+                    expense.paymentMethod !==
+                    paymentMethod
+                ) {
+
+                    return false;
+
+                }
+
+
+                if (
+                    maxAmount &&
+                    Number(expense.amount) >
+                    Number(maxAmount)
+                ) {
+
+                    return false;
+
+                }
+
+
+                if (
+                    date &&
+                    expense.date !== date
+                ) {
+
+                    return false;
+
+                }
+
+
+                return true;
+
+            }
+        );
+
+
+    updateStatistics(
+        statisticsExpenses
+    );
+
+}
+
+
+// ============================================================
+// CLEAR STATISTICS FILTERS
+// ============================================================
+
+document
+    .getElementById(
+        "statisticsClearButton"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            document.getElementById(
+                "statisticsCategory"
+            ).value = "";
+
+
+            document.getElementById(
+                "statisticsPaymentMethod"
+            ).value = "";
+
+
+            document.getElementById(
+                "statisticsMaxAmount"
+            ).value = "";
+
+
+            document.getElementById(
+                "statisticsDate"
+            ).value = "";
+
+
+            statisticsExpenses =
+                [...allExpenses];
+
+
+            updateStatistics(
+                statisticsExpenses
+            );
+
+
+            showNotification(
+                "Statistics filters cleared."
+            );
+
+        }
+    );
 
 
 // ============================================================
@@ -984,12 +1291,13 @@ function updateStatistics(expenses) {
 }
 
 
-
 // ============================================================
 // CATEGORY STATISTICS
 // ============================================================
 
-function updateCategoryStats(expenses) {
+function updateCategoryStats(
+    expenses
+) {
 
     const stats = {};
 
@@ -1092,7 +1400,6 @@ function updateCategoryStats(expenses) {
         );
 
 }
-
 
 
 // ============================================================
@@ -1206,13 +1513,14 @@ function updatePaymentMethodStats(
 }
 
 
-
 // ============================================================
 // DATE RANGE STATISTICS
 // ============================================================
 
 document
-    .getElementById("dateStatsButton")
+    .getElementById(
+        "dateStatsButton"
+    )
     .addEventListener(
         "click",
         function() {
@@ -1229,7 +1537,10 @@ document
                 ).value;
 
 
-            if (!startDate || !endDate) {
+            if (
+                !startDate ||
+                !endDate
+            ) {
 
                 showNotification(
                     "Please select both start and end dates.",
@@ -1241,7 +1552,9 @@ document
             }
 
 
-            if (startDate > endDate) {
+            if (
+                startDate > endDate
+            ) {
 
                 showNotification(
                     "Start date cannot be after end date.",
@@ -1254,7 +1567,7 @@ document
 
 
             const expensesInRange =
-                filteredExpenses.filter(
+                statisticsExpenses.filter(
                     expense =>
                         expense.date >= startDate &&
                         expense.date <= endDate
@@ -1287,7 +1600,6 @@ document
     );
 
 
-
 // ============================================================
 // UPDATE DATE RANGE TOTAL
 // ============================================================
@@ -1308,7 +1620,10 @@ function updateDateRangeTotal(
         ).value;
 
 
-    if (!startDate || !endDate) {
+    if (
+        !startDate ||
+        !endDate
+    ) {
 
         document.getElementById(
             "dateRangeTotal"
@@ -1320,7 +1635,9 @@ function updateDateRangeTotal(
     }
 
 
-    if (startDate > endDate) {
+    if (
+        startDate > endDate
+    ) {
 
         document.getElementById(
             "dateRangeTotal"
@@ -1358,6 +1675,63 @@ function updateDateRangeTotal(
 }
 
 
+// ============================================================
+// PAGE SWITCH HELPER
+// ============================================================
+
+function switchToPage(
+    pageId
+) {
+
+    pages.forEach(page => {
+
+        page.classList.remove(
+            "active-page"
+        );
+
+    });
+
+
+    navButtons.forEach(button => {
+
+        button.classList.remove(
+            "active"
+        );
+
+    });
+
+
+    const page =
+        document.getElementById(
+            pageId
+        );
+
+
+    const button =
+        document.querySelector(
+            `.nav-button[data-page="${pageId}"]`
+        );
+
+
+    if (page) {
+
+        page.classList.add(
+            "active-page"
+        );
+
+    }
+
+
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
+
+    }
+
+}
+
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -1392,7 +1766,6 @@ function formatLabel(value) {
         .join(" ");
 
 }
-
 
 
 // ============================================================
